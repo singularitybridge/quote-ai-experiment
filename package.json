@@ -1,0 +1,43 @@
+{
+  "name": "client",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "dev-host": "vite --host",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@heroicons/react": "^2.0.15",
+    "framer-motion": "^10.2.3",
+    "mobx": "^6.9.0",
+    "mobx-react": "^7.6.0",
+    "mobx-state-tree": "^5.1.8",
+    "mustache": "^4.2.0",
+    "openai": "^3.1.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-hook-speech-to-text": "^0.8.0",
+    "react-router-dom": "^6.8.1",
+    "react-speech-recognition": "^3.10.0",
+    "recoil": "^0.7.6",
+    "regenerator-runtime": "^0.13.11",
+    "sanitize-html": "^2.10.0",
+    "tw-elements": "^1.0.0-beta2"
+  },
+  "devDependencies": {
+    "@types/mustache": "^4.2.2",
+    "@types/react": "^18.0.28",
+    "@types/react-dom": "^18.0.10",
+    "@types/react-speech-recognition": "^3.9.1",
+    "@types/sanitize-html": "^2.8.1",
+    "@vitejs/plugin-react": "^3.1.0",
+    "autoprefixer": "^10.4.13",
+    "postcss": "^8.4.23",
+    "tailwindcss": "^3.3.2",
+    "typescript": "^4.9.3",
+    "vite": "^4.1.0"
+  }
+}
