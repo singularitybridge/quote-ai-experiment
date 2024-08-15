@@ -33,18 +33,26 @@ const PriceQuote: React.FC = () => {
           <QuoteItem key={index} {...item} />
         ))}
 
-        <div className="mt-8 pt-4 border-t-2 border-blue-500 text-xl">
-          <h2 className="font-bold text-gray-800">סיכום</h2>
-          <p className=" font-semibold text-lime-600">
-            סך הכל להצעת המחיר: ₪{totalPrice.toLocaleString()}
-          </p>
-          <p>משך זמן מוערך: {totalDays} ימי עבודה</p>
+        <div className="mt-8 pt-4 border-t-2 border-blue-500 ">
+          <div className="flex justify-between items-center text-xl">
+            <h2 className="font-bold text-gray-800">סיכום</h2>
+            <p className="font-semibold text-lime-600">
+              ₪{totalPrice.toLocaleString()}
+            </p>
+          </div>
+          <div className="mt-2">משך זמן מוערך: {totalDays} ימי עבודה</div>
         </div>
 
-        <div className="mt-6 text-gray-600">
+        <div className="mt-12 text-gray-600">
+
+          <div className=" text-xl mb-4">
+            תנאים כלליים
+          </div>
+
+
           {priceQuoteData.terms.map((term, index) => (
             <div key={index} className="mb-4">
-              <h3 className="font-bold text-gray-800">{term.title}</h3>
+              <div className="font-semibold text-gray-800">{term.title}</div>
               <p>{term.description}</p>
             </div>
           ))}
