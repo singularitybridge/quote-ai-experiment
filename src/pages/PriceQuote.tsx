@@ -1,14 +1,37 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { ContentPageContainer } from "../components/ContentPageContainer";
-import priceQuoteData from "../data/priceQuoteData.json";
+import { fetchQuoteData } from "../services/quoteDataService";
 
 const PriceQuote: React.FC = () => {
-  const totalPrice = priceQuoteData.items.reduce(
-    (sum, item) => sum + item.price,
+  const [quoteData, setQuoteData] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const loadQuoteData = async () => {
+      try {
+        const data = await fetchQuoteData();
+        setQuoteData(data);
+        setLoading(false);
+      } catch (err) {
+        setError("Failed to load quote data. Please try again later.");
+        setLoading(false);
+      }
+    };
+
+    loadQuoteData();
+  }, []);
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>{error}</div>;
+  if (!quoteData) return null;
+
+  const totalPrice = quoteData.items.reduce(
+    (sum: number, item: any) => sum + item.price,
     0
   );
-  const totalDays = priceQuoteData.items.reduce(
-    (sum, item) => sum + item.days,
+  const totalDays = quoteData.items.reduce(
+    (sum: number, item: any) => sum + item.days,
     0
   );
 
@@ -16,20 +39,20 @@ const PriceQuote: React.FC = () => {
     <ContentPageContainer>
       <div className="max-w-3xl mx-auto p-6 bg-white rounded-lg shadow-md">
         <h1 className="text-3xl font-bold mb-4 pb-2 border-b-2 border-blue-500 text-gray-800">
-          {priceQuoteData.projectTitle}
+          {quoteData.projectTitle}
         </h1>
         <div className="my-5 space-y-1">
           <div className="flex">
             <div className="w-16 font-semibold">לכבוד</div>
-            <span>{priceQuoteData.customerName}</span>
+            <span>{quoteData.customerName}</span>
           </div>
           <div className="flex">
             <div className="w-16 font-semibold">מאת</div>
-            <span>{priceQuoteData.companyName}</span>
+            <span>{quoteData.companyName}</span>
           </div>
         </div>
 
-        {priceQuoteData.items.map((item, index) => (
+        {quoteData.items.map((item: any, index: number) => (
           <QuoteItem key={index} {...item} />
         ))}
 
@@ -44,13 +67,11 @@ const PriceQuote: React.FC = () => {
         </div>
 
         <div className="mt-12 text-gray-600">
-
           <div className=" text-xl mb-4">
             תנאים כלליים
           </div>
 
-
-          {priceQuoteData.terms.map((term, index) => (
+          {quoteData.terms.map((term: any, index: number) => (
             <div key={index} className="mb-4">
               <div className="font-semibold text-gray-800">{term.title}</div>
               <p>{term.description}</p>
