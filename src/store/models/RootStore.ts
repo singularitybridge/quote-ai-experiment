@@ -1,23 +1,18 @@
-import { Instance, applySnapshot, flow, types } from "mobx-state-tree";
-import { Project } from "./Project";
+import { types, flow } from "mobx-state-tree";
+import { Quote } from "./Quote";
+import { fetchQuoteData } from "../../services/quoteDataService";
 
-
-const RootStore = types.model("RootStore", {
-  projects: types.array(Project)
-}).actions((self) => ({
-  loadProjects: flow(function* () {
-   
-  }),
-  // ... other actions
-}));
-
-// export type { IRootStore } from Instance<typeof RootStore>;
-export interface IRootStore extends Instance<typeof RootStore> {}
-export { RootStore };
-
-
-
-
-
-
-
+export const RootStore = types
+  .model("RootStore", {
+    quote: types.maybe(Quote),
+  })
+  .actions((self) => ({
+    loadQuote: flow(function* () {
+      try {
+        const quoteData = yield fetchQuoteData();
+        self.quote = Quote.create(quoteData);
+      } catch (error) {
+        console.error("Failed to load quote data:", error);
+      }
+    }),
+  }));

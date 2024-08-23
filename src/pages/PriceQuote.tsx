@@ -1,58 +1,34 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
+import { observer } from "mobx-react-lite";
 import { ContentPageContainer } from "../components/ContentPageContainer";
-import { fetchQuoteData } from "../services/quoteDataService";
+import { useRootStore } from "../store/commom/RootStoreContext";
 
-const PriceQuote: React.FC = () => {
-  const [quoteData, setQuoteData] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+const PriceQuote: React.FC = observer(() => {
+  const { quote } = useRootStore();
 
-  useEffect(() => {
-    const loadQuoteData = async () => {
-      try {
-        const data = await fetchQuoteData();
-        setQuoteData(data);
-        setLoading(false);
-      } catch (err) {
-        setError("Failed to load quote data. Please try again later.");
-        setLoading(false);
-      }
-    };
+  if (!quote) return <div>Loading...</div>;
 
-    loadQuoteData();
-  }, []);
-
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>{error}</div>;
-  if (!quoteData) return null;
-
-  const totalPrice = quoteData.items.reduce(
-    (sum: number, item: any) => sum + item.price,
-    0
-  );
-  const totalDays = quoteData.items.reduce(
-    (sum: number, item: any) => sum + item.days,
-    0
-  );
+  const totalPrice = quote.items.reduce((sum, item) => sum + item.price, 0);
+  const totalDays = quote.items.reduce((sum, item) => sum + item.days, 0);
 
   return (
     <ContentPageContainer>
       <div className="max-w-3xl mx-auto p-6 bg-white rounded-lg shadow-md">
         <h1 className="text-3xl font-bold mb-4 pb-2 border-b-2 border-blue-500 text-gray-800">
-          {quoteData.projectTitle}
+          {quote.projectTitle}
         </h1>
         <div className="my-5 space-y-1">
           <div className="flex">
             <div className="w-16 font-semibold">לכבוד</div>
-            <span>{quoteData.customerName}</span>
+            <span>{quote.customerName}</span>
           </div>
           <div className="flex">
             <div className="w-16 font-semibold">מאת</div>
-            <span>{quoteData.companyName}</span>
+            <span>{quote.companyName}</span>
           </div>
         </div>
 
-        {quoteData.items.map((item: any, index: number) => (
+        {quote.items.map((item, index) => (
           <QuoteItem key={index} {...item} />
         ))}
 
@@ -71,7 +47,7 @@ const PriceQuote: React.FC = () => {
             תנאים כלליים
           </div>
 
-          {quoteData.terms.map((term: any, index: number) => (
+          {quote.terms.map((term, index) => (
             <div key={index} className="mb-4">
               <div className="font-semibold text-gray-800">{term.title}</div>
               <p>{term.description}</p>
@@ -81,7 +57,7 @@ const PriceQuote: React.FC = () => {
       </div>
     </ContentPageContainer>
   );
-};
+});
 
 const QuoteItem: React.FC<{
   title: string;

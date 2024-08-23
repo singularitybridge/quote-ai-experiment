@@ -1,15 +1,13 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { Outlet, useParams } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Outlet } from "react-router-dom";
 import { RootStore } from "./store/models/RootStore";
 import { RootStoreProvider } from "./store/commom/RootStoreContext";
 
-const rootStore = RootStore.create({
-  projects: [],
-});
+const rootStore = RootStore.create({});
 
 const App = () => {
   useEffect(() => {
-    rootStore.loadProjects();
+    rootStore.loadQuote();
   }, []);
 
   return (
