@@ -1,13 +1,17 @@
 import axios from 'axios';
 
-const API_URL = 'https://api.jsonbin.io/v3/b/66c89747e41b4d34e4242f0c';
+const API_BASE_URL = 'https://api.jsonbin.io/v3/b/';
 
-export async function fetchQuoteData() {
+export async function fetchQuoteData(quoteId: string) {
+  if (!quoteId) {
+    throw new Error('Quote ID is required');
+  }
+
+  const apiUrl = `${API_BASE_URL}${quoteId}`;
   try {
-    const response = await axios.get(API_URL);
+    const response = await axios.get(apiUrl);
     return response.data.record;
   } catch (error) {
-    console.error('Error fetching quote data:', error);
     throw error;
   }
 }

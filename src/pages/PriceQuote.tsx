@@ -1,12 +1,33 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { observer } from "mobx-react-lite";
+import { useParams } from "react-router-dom";
 import { ContentPageContainer } from "../components/ContentPageContainer";
 import { useRootStore } from "../store/commom/RootStoreContext";
+import { NotFound } from "./NotFound";
 
 const PriceQuote: React.FC = observer(() => {
-  const { quote } = useRootStore();
+  const { quote, loadQuote, isLoading, error } = useRootStore();
+  const { quoteId } = useParams<{ quoteId: string }>();
 
-  if (!quote) return <div>Loading...</div>;
+  useEffect(() => {
+    if (quoteId) {
+      loadQuote(quoteId);
+    }
+  }, [quoteId, loadQuote]);
+
+  if (isLoading) {
+    return (
+      <ContentPageContainer>
+        <div className="flex items-center justify-center h-screen">
+          <div className="text-2xl font-bold text-gray-800">טוען...</div>
+        </div>
+      </ContentPageContainer>
+    );
+  }
+
+  if (error || !quote) {
+    return <NotFound />;
+  }
 
   const totalPrice = quote.items.reduce((sum, item) => sum + item.price, 0);
   const totalDays = quote.items.reduce((sum, item) => sum + item.days, 0);
